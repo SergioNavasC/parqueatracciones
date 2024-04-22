@@ -18,9 +18,8 @@ class Database {
     );
     var conn = await MySqlConnection.connect(settings);
     try{
-      await _crearDB(conn);
-      //await _crearTablaUsuarios(conn);
-      //await _crearTablaMascotas(conn);
+      await _crearPQ(conn);
+      await _crearTablaUsuarios(conn);
       await conn.close();
     } catch(e){
       print(e);
@@ -33,16 +32,27 @@ class Database {
       host: this._host, 
       port: this._port,
       user: this._user,
-      db: 'damdb'
+      db: 'ParqueAtracciones'
     );
       
     return await MySqlConnection.connect(settings);
- 
+     
   }
   
-  _crearDB (conn) async {
-    await conn.query('CREATE DATABASE IF NOT EXISTS damdb');
-    await conn.query('USE damdb');
-    print('Conectado a damdb');
+  _crearPQ (conn) async {
+    await conn.query('CREATE DATABASE IF NOT EXISTS ParqueAtracciones');
+    await conn.query('USE ParqueAtracciones');
+    print('Conectado a ParqueAtracciones');
+  }
+  _crearTablaUsuarios(conn) async {
+        await conn.query('''CREATE TABLE IF NOT EXISTS usuarios(
+        idusuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(100) NOT NULL,
+        apellido VARCHAR(100) NOT NULL,
+        password VARCHAR(100) NOT NULL,
+        DNI VARCHAR(100) NOT NULL UNIQUE,
+        correo VARCHAR(100) NOT NULL
+    )''');
+    print('Tabla usuarios creada');
   }
 }
