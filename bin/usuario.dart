@@ -26,6 +26,7 @@ Usuario.fromMap(ResultRow map){
 }
 
 //Métodos
+///Este método es para poder insertar usuarios dentro de la base de datos
     insertarUsuario() async {
     var conn = await Database().conexion();
     try {
@@ -37,4 +38,22 @@ Usuario.fromMap(ResultRow map){
       await conn.close();
     }
   }
+///Este método va a ser para poder iniciar sesion dentro de la APP
+  loginUser() async {
+    var conn = await Database().conexion();
+    try {
+      var resultado = await conn.query('SELECT * FROM usuarios WHERE nombre = ?', [nombre]);
+      Usuario usuario = Usuario.fromMap(resultado.first);
+      if (dni == usuario.dni) {
+        return usuario;
+      } else
+        return false;
+    } catch (e) {
+      print(e);
+      return false;
+    } finally {
+      await conn.close();
+    }
+  }
+
 }

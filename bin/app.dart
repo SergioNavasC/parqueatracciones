@@ -5,7 +5,7 @@ class App{
 
   ///Esto va a ser para poder iniciar sesion o registrarse en la pagina.
 
-  inicioApp(){
+  menuInicial(){
     int? respuesta;
     do {
         stdout.writeln("""
@@ -13,11 +13,11 @@ class App{
           2-Registro 
         """);
       respuesta = parsearRespuesta();
-    } while (MenuInicialRespuesta(respuesta));
+    } while (menuInicialRespuesta(respuesta));
     switch(respuesta){
       case 1:
-      print("Esto va a ser un inicio de usuario a la pagina"); 
-        //loginUser();
+      //print("Esto va a ser un inicio de usuario a la pagina"); 
+        login();
         break;
       case 2:
       //print("Esto va a ser para crear usuarios");
@@ -35,7 +35,7 @@ class App{
             3- Comprobar tipo de tarifa  
           """);
       respuesta = parsearRespuesta();
-      } while (MenuLoginRespuesta(respuesta));
+      } while (menuLoginRespuesta(respuesta));
       switch(respuesta){
         case 1:
           print("Aqui van a salir todos los tipos de tarifas");
@@ -66,9 +66,26 @@ class App{
     usuario.password = stdin.readLineSync();
 
     await usuario.insertarUsuario();
-    inicioApp();
+    menuInicial();
+  }
+  login() async {
+    Usuario usuario = new Usuario();
+    stdout.writeln("Escribe tu nombre");
+    usuario.nombre = stdin.readLineSync();
+    stdout.writeln("escribe tu contraseña aqui");
+    usuario.password = stdin.readLineSync();
+    stdout.writeln("Escribe tu dni aqui");
+    
+    usuario.dni = stdin.readLineSync();
+    var resultado = await usuario.loginUser();
+    if(resultado == false){
+      stdout.writeln('Tu nombre de usuario o contraseña son incorrectos');
+      menuInicial();
+    } else {
+      menuLogin(resultado);
+    }
   }
 }
-bool MenuInicialRespuesta(var respuesta) => respuesta == null || respuesta !=1 && respuesta !=2;
+bool menuInicialRespuesta(var respuesta) => respuesta == null || respuesta !=1 && respuesta !=2;
 int? parsearRespuesta() => int.tryParse(stdin.readLineSync() ?? 'e');
-bool MenuLoginRespuesta(var respuesta) => respuesta == null || respuesta !=1 && respuesta !=2 && respuesta !=3;
+bool menuLoginRespuesta(var respuesta) => respuesta == null || respuesta !=1 && respuesta !=2 && respuesta !=3;

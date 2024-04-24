@@ -50,7 +50,7 @@ class Database {
         nombre VARCHAR(100) NOT NULL,
         apellido VARCHAR(100) NOT NULL,
         password VARCHAR(100) NOT NULL,
-        DNI VARCHAR(100) NOT NULL UNIQUE,
+        dni VARCHAR(100) NOT NULL UNIQUE,
         correo VARCHAR(100) NOT NULL
     )''');
     print('Tabla usuarios creada');
