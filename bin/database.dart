@@ -20,6 +20,7 @@ class Database {
     try{
       await _crearPQ(conn);
       await _crearTablaUsuarios(conn);
+      await _crearTablaTarifas(conn);
       await conn.close();
     } catch(e){
       print(e);
@@ -54,5 +55,15 @@ class Database {
         correo VARCHAR(100) NOT NULL
     )''');
     print('Tabla usuarios creada');
+  }
+  _crearTablaTarifas(conn)async{
+    await conn.query(""" CREATE TABLE IF NOT EXISTS tarifas(
+      idtarifas INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      nombre VARCHAR(100) NOT NULL UNIQUE,
+      precio DOUBLE NOT NULL,
+      detalles LONGTEXT NULL
+    )
+    """);
+    print("Tabla tarifas creada");
   }
 }

@@ -1,5 +1,6 @@
 import "dart:io";
 
+import "tarifas.dart";
 import "usuario.dart";
 class App{
 
@@ -25,14 +26,16 @@ class App{
         break;
     }
   }
-   menuLogin(Usuario usuario){
+   menuLogin(Usuario usuario) async{
       int? respuesta;
       String? nombre = usuario.nombre;
+      String? apellido = usuario.apellido;
       do {
-          stdout.writeln(""" Bienvenido de nuevo $nombre, que desea hacer hoy? 
+          stdout.writeln(""" Bienvenido de nuevo $nombre $apellido, que desea hacer hoy? 
             1-Tipos de Tarifas
             2-Añadir metodos de pago
             3- Comprobar tipo de tarifa  
+            4- Añadir Tarifas (solo admin)
           """);
       respuesta = parsearRespuesta();
       } while (menuLoginRespuesta(respuesta));
@@ -48,6 +51,9 @@ class App{
         case 3:
           print("Esto va a ser para comprobar el tipo de tarifa que tiene el usuario");
           //comprobarTarifa();
+          break;
+        case 4:
+           await addTarifas();
           break;
       }
     }
@@ -85,7 +91,21 @@ class App{
       menuLogin(resultado);
     }
   }
+  addTarifas()async{
+  
+    Tarifa tarifa = new Tarifa();
+    stdout.writeln("Escribe el nombre de la Tarifa");
+    tarifa.nombre = stdin.readLineSync();
+    stdout.writeln("Escribe el precio de la tarifa");
+    tarifa.precio = parsearRespuestaDouble();
+    stdout.writeln("Escribe los detalles sobre la tarifa");
+    tarifa.detalles = stdin.readLineSync();
+    await Tarifa().insertarTarifas();
+    menuInicial();
+    
+  }
 }
 bool menuInicialRespuesta(var respuesta) => respuesta == null || respuesta !=1 && respuesta !=2;
 int? parsearRespuesta() => int.tryParse(stdin.readLineSync() ?? 'e');
-bool menuLoginRespuesta(var respuesta) => respuesta == null || respuesta !=1 && respuesta !=2 && respuesta !=3;
+bool menuLoginRespuesta(var respuesta) => respuesta == null || respuesta !=1 && respuesta !=2 && respuesta !=3 && respuesta !=4;
+double? parsearRespuestaDouble() => double.tryParse(stdin.readLineSync() ?? 'e');
